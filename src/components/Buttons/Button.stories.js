@@ -6,7 +6,7 @@ export default {
   component: Button,
 };
 
-export const Test = () => (
+export const Buttons = () => (
   <>
     <Button variant="contained" color="primary">
       hello guys
@@ -20,7 +20,6 @@ export const Test = () => (
     <Button gradient variant="outlined">
       hello guys
     </Button>
-
     <Button variant="outlined" color="primary">
       hello guys
     </Button>

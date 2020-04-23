@@ -5,7 +5,6 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import theme from "../theme";
 
 const Button = ({ gradient = false, ...rest }) => {
-  // const newThemeWithGradient = { ...theme };
   const newThemeWithGradient = createMuiTheme({
     overrides: {
       MuiButton: {
