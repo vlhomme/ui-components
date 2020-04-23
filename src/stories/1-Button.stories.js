@@ -16,9 +16,10 @@ export const Test = () => (
     <MyButton variant="contained" color="secondary">
       hello guys
     </MyButton>
-    <MyButton variant="contained" color="thirdly">
+    <MyButton gradient variant="contained">
       hello guys
     </MyButton>
+
     <MyButton variant="outlined" color="primary">
       hello guys
     </MyButton>
