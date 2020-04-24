@@ -31,10 +31,14 @@ const Button = ({ gradient = false, ...rest }) => {
     <ThemeProvider theme={theme}>
       {gradient ? (
         <ThemeProvider theme={newThemeWithGradient}>
-          <MaterialButton {...rest}>{rest.children}</MaterialButton>
+          <MaterialButton fullWidth {...rest}>
+            {rest.children}
+          </MaterialButton>
         </ThemeProvider>
       ) : (
-        <MaterialButton {...rest}>{rest.children}</MaterialButton>
+        <MaterialButton fullWidth {...rest}>
+          {rest.children}
+        </MaterialButton>
       )}
     </ThemeProvider>
   );

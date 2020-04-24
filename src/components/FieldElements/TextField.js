@@ -7,7 +7,7 @@ import theme from "../theme";
 const TextField = (props) => {
   return (
     <ThemeProvider theme={theme}>
-      <MaterialTextfield {...props} />
+      <MaterialTextfield {...props} fullWidth />
     </ThemeProvider>
   );
 };

@@ -11,7 +11,7 @@ export const Logins = () => (
   <div
     style={{
       backgroundColor: theme.palette.primary.main,
-      width: "1500px",
+      width: "800px",
       height: "600px",
       display: "flex",
       justifyContent: "center",

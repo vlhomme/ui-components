@@ -16,6 +16,7 @@ const TextField = (props) => {
     <ThemeProvider theme={theme}>
       <MaterialTextfield
         {...props}
+        fullWidth
         type={showPassword ? "text" : "password"}
         InputProps={{
           endAdornment: (
