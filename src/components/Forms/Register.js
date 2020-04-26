@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Divider, Typography, Grid } from "@material-ui/core";
+import { Field, useFormikContext } from "formik";
+
 import theme from "../theme";
 
 import Password from "../FieldElements/Password";
@@ -20,12 +22,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Login = (goToRegister) => {
+const Register = (props) => {
   const classes = useStyles();
+  const { handleSubmit } = useFormikContext();
   return (
     <div className={classes.root}>
       <Paper elevation={3}>
-        <Grid container spacing={2} style={{ height: theme.spacing(7) }}>
+        <Grid
+          container
+          spacing={2}
+          style={{
+            height: theme.spacing(7),
+          }}
+        >
           <Grid item xs={1}></Grid>
           <Grid item xs={7}>
             <Typography
@@ -37,10 +46,9 @@ const Login = (goToRegister) => {
                 display: "flex",
                 alignItems: "center",
                 color: theme.palette.secondary.main,
-                cursor: "pointer",
               }}
             >
-              créer un compte
+              se connecter
             </Typography>
           </Grid>
           <Grid item xs={4}></Grid>
@@ -53,27 +61,54 @@ const Login = (goToRegister) => {
             xs={10}
             style={{
               display: "flex",
-              height: theme.spacing(20),
+              //   backgroundColor: theme.palette.primary.light,
+              height: theme.spacing(25),
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-around",
-              marginBottom: theme.spacing(5),
-              marginTop: theme.spacing(4),
+              marginBottom: theme.spacing(2),
+              marginTop: theme.spacing(2),
             }}
           >
-            <TextField label="identifiant" color="secondary" />
-            <Password label="mot de passe" color="secondary" />
+            <Field
+              as={TextField}
+              type="input"
+              label="prénom"
+              name="firstname"
+              color="secondary"
+            />
+            <Field
+              as={TextField}
+              type="input"
+              label="nom"
+              name="lastname"
+              color="secondary"
+            />
+            <Field
+              as={TextField}
+              type="input"
+              label="mail"
+              name="mail"
+              color="secondary"
+            />
+            <Field
+              as={Password}
+              label="mot de passe"
+              name="password"
+              color="secondary"
+            />
           </Grid>
           <Grid item xs={1}></Grid> <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Button
               color="secondary"
               variant="contained"
+              onClick={handleSubmit}
               style={{ height: "60px" }}
             >
-              se connecter
+              créer un compte
             </Button>
-          </Grid>{" "}
+          </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
       </Paper>
@@ -81,9 +116,8 @@ const Login = (goToRegister) => {
   );
 };
 
-Login.propTypes = {
+Register.propTypes = {
   dummy: PropTypes.string,
-  goToRegister: PropTypes.func,
 };
 
-export default Login;
+export default Register;
