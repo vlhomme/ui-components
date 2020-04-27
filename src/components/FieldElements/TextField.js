@@ -12,6 +12,8 @@ const TextField = (props) => {
   );
 };
 
-TextField.propTypes = {};
+TextField.propTypes = {
+  dummy: PropTypes.string,
+};
 
 export default TextField;

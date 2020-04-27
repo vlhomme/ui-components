@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Divider, Typography, Grid } from "@material-ui/core";
-import theme from "../theme";
+import { Field, useFormikContext } from "formik";
 
+import theme from "../theme";
 import Password from "../FieldElements/Password";
 import TextField from "../FieldElements/TextField";
 import Button from "../Buttons/Button";
@@ -22,6 +23,7 @@ const useStyles = makeStyles(() => ({
 
 const Login = (goToRegister) => {
   const classes = useStyles();
+  const { handleSubmit } = useFormikContext();
   return (
     <div className={classes.root}>
       <Paper elevation={3}>
@@ -61,14 +63,28 @@ const Login = (goToRegister) => {
               marginTop: theme.spacing(4),
             }}
           >
-            <TextField label="identifiant" color="secondary" />
-            <Password label="mot de passe" color="secondary" />
+            <Field
+              as={TextField}
+              type="input"
+              label="mail"
+              name="mail"
+              color="secondary"
+            />
+            <Field
+              as={Password}
+              label="mot de passe"
+              name="password"
+              color="secondary"
+            />
+            {/* <TextField label="identifiant" color="secondary" />
+            <Password label="mot de passe" color="secondary" /> */}
           </Grid>
           <Grid item xs={1}></Grid> <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Button
               color="secondary"
               variant="contained"
+              onClick={handleSubmit}
               style={{ height: "60px" }}
             >
               se connecter
