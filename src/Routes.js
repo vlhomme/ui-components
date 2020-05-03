@@ -17,7 +17,12 @@ function Routes() {
             <Login {...props} goToRegister={() => history.push("/register")} />
           )}
         />
-        <Route path="/register" component={Register} />
+        <Route
+          path="/register"
+          render={(props) => (
+            <Register {...props} goToLogin={() => history.push("/login")} />
+          )}
+        />
         <Route component={Error} />
       </Switch>
     </div>

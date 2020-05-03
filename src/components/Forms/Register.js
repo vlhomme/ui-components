@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Register = (props) => {
+const Register = ({ goToLogin }) => {
   const classes = useStyles();
   const { handleSubmit } = useFormikContext();
   return (
@@ -40,12 +40,14 @@ const Register = (props) => {
             <Typography
               variant="button"
               gutterBottom
+              onClick={goToLogin}
               style={{
                 height: theme.spacing(5),
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
                 color: theme.palette.secondary.main,
+                cursor: "pointer",
               }}
             >
               se connecter
@@ -91,6 +93,21 @@ const Register = (props) => {
               name="mail"
               color="secondary"
             />
+            <Typography style={{ fontSize: "10px" }}>
+              le mot de passe doit comprendre 10 caractères minimum
+            </Typography>
+            <Typography style={{ fontSize: "10px" }}>
+              Le mot de passe doit comprendre un chiffre
+            </Typography>
+            <Typography style={{ fontSize: "10px" }}>
+              le mot de passe doit comprendre un caractère spécial
+            </Typography>
+            <Typography style={{ fontSize: "10px" }}>
+              Le mot de passe doit comprendre une lettre en majuscule
+            </Typography>
+            <Typography style={{ fontSize: "10px" }}>
+              Le mot de passe doit comprendre une lettre en minuscule
+            </Typography>
             <Field
               as={Password}
               label="mot de passe"
@@ -117,7 +134,7 @@ const Register = (props) => {
 };
 
 Register.propTypes = {
-  dummy: PropTypes.string,
+  goToLogin: PropTypes.func,
 };
 
 export default Register;

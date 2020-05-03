@@ -18,20 +18,21 @@ const onSubmit = async (values) => {
   console.log("response", response);
 };
 
-const LoginContainer = (props) => {
+const LoginContainer = ({ goToRegister }) => {
   return (
     <Formik
       initialValues={initialValues}
       // validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      <Login />
+      <Login goToRegister={goToRegister} />
     </Formik>
   );
 };
 
 LoginContainer.propTypes = {
   dummy: PropTypes.string,
+  goToRegister: PropTypes.func,
 };
 
 export default LoginContainer;

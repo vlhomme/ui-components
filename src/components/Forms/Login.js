@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Login = (goToRegister) => {
+const Login = ({ goToRegister }) => {
   const classes = useStyles();
   const { handleSubmit } = useFormikContext();
   return (
@@ -33,6 +33,7 @@ const Login = (goToRegister) => {
             <Typography
               variant="button"
               gutterBottom
+              onClick={goToRegister}
               style={{
                 height: theme.spacing(5),
                 width: "100%",
