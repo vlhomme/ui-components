@@ -22,42 +22,64 @@ const validate = (values) => {
   const errors = {};
   errors.passwordTest = [];
   if (!values.password) {
-    errors.passwordTest.push("required");
+    errors.passwordTest.push({
+      msg: "10 caractères minimum",
+      error: "length",
+    });
+    errors.passwordTest.push({
+      msg: "un caractère spécial",
+      error: "specialChar",
+    });
+    errors.passwordTest.push({
+      msg: "une lettre en majuscule",
+      error: "upperCase",
+    });
+    errors.passwordTest.push({
+      msg: "une lettre en minuscule",
+      error: "lowerCase",
+    });
+    errors.passwordTest.push({
+      msg: "un chiffre",
+      error: "digit",
+    });
   } else {
     if (values.password.length < 10) {
       errors.passwordTest.push({
-        msg: "le mot de passe doit comprendre 10 caractères minimum",
+        msg: "10 caractères minimum",
         error: "length",
       });
     }
-    const specialChar = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    const specialChar = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
     if (!specialChar.test(values.password)) {
       errors.passwordTest.push({
-        msg: "le mot de passe doit comprendre un caractère spécial",
+        msg: "un caractère spécial",
         error: "specialChar",
       });
     }
     const upperCase = /[A-Z]/;
     if (!upperCase.test(values.password)) {
       errors.passwordTest.push({
-        msg: "Le mot de passe doit comprendre une lettre en majuscule",
+        msg: "une lettre en majuscule",
         error: "upperCase",
       });
     }
     const lowerCase = /[a-z]/;
     if (!lowerCase.test(values.password)) {
       errors.passwordTest.push({
-        msg: "Le mot de passe doit comprendre une lettre en minuscule",
+        msg: "une lettre en minuscule",
         error: "lowerCase",
       });
     }
     const digit = /[0-9]/;
     if (!digit.test(values.password)) {
       errors.passwordTest.push({
-        msg: "Le mot de passe doit comprendre un chiffre",
+        msg: "un chiffre",
         error: "digit",
       });
     }
+  }
+  if (errors.passwordTest.length === 0) {
+    return {};
   }
   return errors;
 };
