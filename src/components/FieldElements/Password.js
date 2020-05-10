@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {
   TextField as MaterialTextfield,
   InputAdornment,
+  Grid,
 } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -18,6 +19,8 @@ const TextField = (props) => {
         {...props}
         fullWidth
         type={showPassword ? "text" : "password"}
+        // value={}
+        // onChange={}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -32,6 +35,29 @@ const TextField = (props) => {
           ),
         }}
       />
+      <Grid container style={{ marginTop: "3px" }}>
+        <Grid
+          item
+          xs={3}
+          style={{ backgroundColor: theme.palette.primary.main, height: "5px" }}
+        ></Grid>
+        <Grid
+          item
+          xs={3}
+          style={{ backgroundColor: theme.palette.primary.main, height: "5px" }}
+        ></Grid>
+        <Grid
+          item
+          xs={3}
+          style={{ backgroundColor: theme.palette.primary.main, height: "5px" }}
+        ></Grid>
+        <Grid
+          item
+          xs={3}
+          style={{ backgroundColor: "white", height: "5px" }}
+        ></Grid>
+        Force du mot de passe : faible
+      </Grid>
     </ThemeProvider>
   );
 };

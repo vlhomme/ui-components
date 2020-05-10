@@ -1,7 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Divider, Typography, Grid } from "@material-ui/core";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+import { green, red } from "@material-ui/core/colors";
+import {
+  Paper,
+  Divider,
+  Typography,
+  Grid,
+  ThemeProvider,
+} from "@material-ui/core";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { Field, useFormikContext } from "formik";
 
 import theme from "../theme";
@@ -9,12 +18,6 @@ import theme from "../theme";
 import Password from "../FieldElements/Password";
 import TextField from "../FieldElements/TextField";
 import Button from "../Buttons/Button";
-
-import Digits from "../Icons/Digits";
-import Lowercase from "../Icons/Lowercase";
-import UpperCase from "../Icons/UpperCase";
-import Ten from "../Icons/Ten";
-import Special from "../Icons/Special";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -28,6 +31,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    marginTop: "150px",
+    backgroundColor: "white",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}))(Tooltip);
+
 const Register = ({ goToLogin }) => {
   const classes = useStyles();
   const { handleSubmit, errors, dirty } = useFormikContext();
@@ -37,6 +51,7 @@ const Register = ({ goToLogin }) => {
   let checkLowerCase;
   let checkDigits;
   let checkSpecial;
+  let checkPoorPassword;
   const checkPasswordError = (errors, dirty) => {
     if (dirty) {
       checkDigits = true;
@@ -44,12 +59,14 @@ const Register = ({ goToLogin }) => {
       checkUpperCase = true;
       checkLowerCase = true;
       checkSpecial = true;
+      checkPoorPassword = true;
     } else {
       checkDigits = false;
       checkLength = false;
       checkUpperCase = false;
       checkLowerCase = false;
       checkSpecial = false;
+      checkPoorPassword = false;
     }
 
     if (errors && errors.passwordTest) {
@@ -58,6 +75,7 @@ const Register = ({ goToLogin }) => {
       let ErrorOnLowerCase = true;
       let ErrorOnUpperCase = true;
       let ErrorOnSpecial = true;
+      let ErrorOnPoorPassword = true;
       for (let i = 0; i < errors.passwordTest.length; i++) {
         const element = errors.passwordTest[i];
         if (element.error === "length") {
@@ -70,8 +88,11 @@ const Register = ({ goToLogin }) => {
           ErrorOnLowerCase = false;
         } else if (element.error === "digit") {
           ErrorOnDighits = false;
+        } else if (element.error === "poorPassword") {
+          ErrorOnPoorPassword = false;
         }
       }
+      checkPoorPassword = ErrorOnPoorPassword;
       checkLength = ErrorOnLength;
       checkDigits = ErrorOnDighits;
       checkUpperCase = ErrorOnUpperCase;
@@ -89,170 +110,351 @@ const Register = ({ goToLogin }) => {
 
   return (
     <div className={classes.root}>
-      <Paper elevation={3}>
-        <Grid
-          container
-          spacing={2}
-          style={{
-            height: theme.spacing(7),
-          }}
-        >
-          <Grid item xs={1}></Grid>
-          <Grid item xs={7}>
-            <Typography
-              variant="button"
-              gutterBottom
-              onClick={goToLogin}
-              style={{
-                height: theme.spacing(5),
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                color: theme.palette.secondary.main,
-                cursor: "pointer",
-              }}
-            >
-              se connecter
-            </Typography>
-          </Grid>
-          <Grid item xs={4}></Grid>
-        </Grid>
-        <Divider variant="middle" />
-        <Grid container spacing={2}>
-          <Grid item xs={1}></Grid>
+      <ThemeProvider theme={theme}>
+        <Paper elevation={3}>
           <Grid
-            item
-            xs={10}
+            container
+            spacing={2}
             style={{
-              display: "flex",
-              //   backgroundColor: theme.palette.primary.light,
-              // height: theme.spacing(25),
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "space-around",
-              marginBottom: theme.spacing(2),
-              marginTop: theme.spacing(2),
+              height: theme.spacing(7),
             }}
           >
-            <Field
-              as={TextField}
-              type="input"
-              label="prénom"
-              name="firstname"
-              color="secondary"
-            />
-            <Field
-              as={TextField}
-              type="input"
-              label="nom"
-              name="lastname"
-              color="secondary"
-            />
-            <Field
-              as={TextField}
-              type="input"
-              label="mail"
-              name="mail"
-              color="secondary"
-            />
-            <Field
-              as={Password}
-              label="mot de passe"
-              name="password"
-              color="secondary"
-            />
-            <div style={{ width: "100%", marginTop: theme.spacing(2) }}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={7}>
               <Typography
+                variant="button"
+                gutterBottom
+                onClick={goToLogin}
                 style={{
-                  fontSize: "10px",
+                  height: theme.spacing(5),
+                  width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  margin: "2px",
-                  textDecoration: checkLength ? "line-through" : "",
+                  color: theme.palette.primary.main,
+                  cursor: "pointer",
                 }}
               >
-                <Ten
-                  color={checkLength ? "primary" : "secondary"}
-                  style={{ marginRight: "4px" }}
-                />
-                10 caractères minimum
+                se connecter
               </Typography>
-              <Typography
-                style={{
-                  fontSize: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "2px",
-                  textDecoration: checkDigits ? "line-through" : "",
-                }}
-              >
-                <Digits
-                  color={checkDigits ? "primary" : "secondary"}
-                  style={{ marginRight: "4px" }}
-                />
-                un chiffre
-              </Typography>
-              <Typography
-                style={{
-                  fontSize: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "2px",
-                  textDecoration: checkSpecial ? "line-through" : "",
-                }}
-              >
-                <Special
-                  color={checkSpecial ? "primary" : "secondary"}
-                  style={{ marginRight: "4px" }}
-                />
-                un caractère spécial
-              </Typography>
-              <Typography
-                style={{
-                  fontSize: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "2px",
-                  textDecoration: checkUpperCase ? "line-through" : "",
-                }}
-              >
-                <UpperCase
-                  color={checkUpperCase ? "primary" : "secondary"}
-                  style={{ marginRight: "4px" }}
-                />
-                une lettre en majuscule
-              </Typography>
-              <Typography
-                style={{
-                  fontSize: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "2px",
-                  textDecoration: checkLowerCase ? "line-through" : "",
-                }}
-              >
-                <Lowercase
-                  color={checkLowerCase ? "primary" : "secondary"}
-                  style={{ marginRight: "4px" }}
-                />
-                une lettre en minuscule
-              </Typography>
-            </div>
+            </Grid>
+            <Grid item xs={4}></Grid>
           </Grid>
-          <Grid item xs={1}></Grid> <Grid item xs={1}></Grid>
-          <Grid item xs={10}>
-            <Button
-              color="secondary"
-              variant="contained"
-              onClick={handleSubmit}
-              style={{ height: "60px" }}
+          <Divider variant="middle" />
+          <Grid container spacing={2}>
+            <Grid item xs={1}></Grid>
+            <Grid
+              item
+              xs={10}
+              style={{
+                display: "flex",
+                //   backgroundColor: theme.palette.primary.light,
+                // height: theme.spacing(25),
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "space-around",
+                marginBottom: theme.spacing(2),
+                marginTop: theme.spacing(2),
+              }}
             >
-              créer un compte
-            </Button>
+              <Field
+                as={TextField}
+                type="input"
+                label="prénom"
+                name="firstname"
+                color="primary"
+              />
+              <Field
+                as={TextField}
+                type="input"
+                label="nom"
+                name="lastname"
+                color="primary"
+              />
+              <Field
+                as={TextField}
+                type="input"
+                label="mail"
+                name="mail"
+                color="primary"
+              />
+              <HtmlTooltip
+                title={
+                  <React.Fragment>
+                    <Typography color="inherit">
+                      Sécurité de votre mot de passe
+                    </Typography>
+                    <div style={{ width: "100%", marginTop: theme.spacing(2) }}>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkLength ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkLength ? "secondary" : "primary"}
+                          style={
+                            checkLength
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        10 caractères minimum
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkDigits ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={}
+                          style={
+                            checkDigits
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        un chiffre
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkSpecial ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkSpecial ? "secondary" : "primary"}
+                          style={
+                            checkSpecial
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        un caractère spécial
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkUpperCase ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkUpperCase ? "secondary" : "primary"}
+                          style={
+                            checkUpperCase
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        une lettre en majuscule
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkLowerCase ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkLowerCase ? "secondary" : "primary"}
+                          style={
+                            checkLowerCase
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        une lettre en minuscule
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkPoorPassword
+                            ? "line-through"
+                            : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkPoorPassword ? "secondary" : "primary"}
+                          style={
+                            checkPoorPassword
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        mot de passe trop courant
+                      </Typography>
+                    </div>
+                  </React.Fragment>
+                }
+              >
+                <Field
+                  as={Password}
+                  label="mot de passe"
+                  name="password"
+                  color="primary"
+                />
+              </HtmlTooltip>
+            </Grid>
+            <Grid item xs={1}></Grid> <Grid item xs={1}></Grid>
+            <Grid item xs={10}>
+              <HtmlTooltip
+                title={
+                  <React.Fragment>
+                    <Typography color="inherit">
+                      Sécurité de votre mot de passe
+                    </Typography>
+                    <div style={{ width: "100%", marginTop: theme.spacing(2) }}>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkLength ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkLength ? "secondary" : "primary"}
+                          style={
+                            checkLength
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        10 caractères minimum
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkDigits ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={}
+                          style={
+                            checkDigits
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        un chiffre
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkSpecial ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkSpecial ? "secondary" : "primary"}
+                          style={
+                            checkSpecial
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        un caractère spécial
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkUpperCase ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkUpperCase ? "secondary" : "primary"}
+                          style={
+                            checkUpperCase
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        une lettre en majuscule
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkLowerCase ? "line-through" : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkLowerCase ? "secondary" : "primary"}
+                          style={
+                            checkLowerCase
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        une lettre en minuscule
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontSize: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          margin: "2px",
+                          textDecoration: checkPoorPassword
+                            ? "line-through"
+                            : "",
+                        }}
+                      >
+                        <ErrorOutlineIcon
+                          // color={checkPoorPassword ? "secondary" : "primary"}
+                          style={
+                            checkPoorPassword
+                              ? { marginRight: "4px", color: green[500] }
+                              : { marginRight: "4px", color: red[500] }
+                          }
+                        />
+                        mot de passe difficile à deviner
+                      </Typography>
+                    </div>
+                  </React.Fragment>
+                }
+              >
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleSubmit}
+                  style={{ height: "60px" }}
+                >
+                  créer un compte
+                </Button>
+              </HtmlTooltip>
+            </Grid>
+            <Grid item xs={1}></Grid>
           </Grid>
-          <Grid item xs={1}></Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </ThemeProvider>
     </div>
   );
 };
