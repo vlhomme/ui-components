@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
     "& > *": {
       margin: theme.spacing(1),
       width: theme.spacing(50),
-      height: theme.spacing(64),
+      // height: theme.spacing(64),
     },
   },
 }));
@@ -103,13 +103,14 @@ const Register = ({ goToLogin }) => {
               />
               <Field
                 as={Password}
+                withStrengthMeter
                 label="mot de passe"
                 name="password"
                 color="primary"
               />
             </Grid>
             <Grid item xs={1}></Grid> <Grid item xs={1}></Grid>
-            <Grid item xs={10}>
+            <Grid item xs={10} style={{ marginBottom: theme.spacing(4) }}>
               <Button
                 color="primary"
                 variant="contained"

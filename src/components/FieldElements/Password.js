@@ -1,4 +1,4 @@
-import React, { useState, Component, useEffect } from "react";
+import React, { useState, Component } from "react";
 import PropTypes from "prop-types";
 import {
   TextField as MaterialTextfield,
@@ -29,8 +29,11 @@ const HtmlTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 const TextField = (props) => {
-  const { handleChange, setFieldValue } = useFormikContext();
+  const { withStrengthMeter, ...rest } = props;
   const [showPassword, setShowPassword] = useState(false);
+
+  // console.log("withStrengthMeter:", withStrengthMeter);
+  const { handleChange, setFieldValue } = useFormikContext();
   const [passwordChecks, setPasswordChecks] = useState([
     {
       msg: "10 caractères minimum",
@@ -58,6 +61,31 @@ const TextField = (props) => {
     },
   ]);
   const [passwordStrength, setPasswordStrength] = useState(0);
+
+  if (!withStrengthMeter) {
+    return (
+      <ThemeProvider theme={theme}>
+        <MaterialTextfield
+          {...rest}
+          fullWidth
+          type={showPassword ? "text" : "password"}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </ThemeProvider>
+    );
+  }
 
   const containsPoorSecurityString = (password) => {
     for (let index = 0; index < passwords.length; index++) {
@@ -245,7 +273,7 @@ const TextField = (props) => {
       >
         <div>
           <MaterialTextfield
-            {...props}
+            {...rest}
             fullWidth
             type={showPassword ? "text" : "password"}
             onChange={(e) => {
@@ -257,11 +285,11 @@ const TextField = (props) => {
               checkPasswordError(tmpChecks);
               // 3. Setting Password Strength
               const tmpPassStrength = calculatePasswordStrength(e.target.value);
-              console.log("tmpPassStrength:", tmpPassStrength);
+              // console.log("tmpPassStrength:", tmpPassStrength);
               setPasswordStrength(tmpPassStrength);
               // 4. Pass Password Strength to Formik For validation
               setFieldValue("passwordStrength", tmpPassStrength);
-              console.log(validate(e.target.value));
+              // console.log(validate(e.target.value));
             }}
             InputProps={{
               endAdornment: (

@@ -14,7 +14,16 @@ const initialValues = {
 
 const validationSchema = Yup.object({
   // password: Yup.string().required("Password is required"),
-  password: Yup.string().required("Password is required").min(10),
+  firstname: Yup.string().required("Prénom requis"),
+  lastname: Yup.string().required("Nom requis"),
+  mail: Yup.string()
+    .required("Email requis")
+    .email("vous devez rentrer un email valide"),
+  password: Yup.string().required("Mot de passe requis").min(10),
+  passwordStrength: Yup.number().min(
+    1,
+    "votre mot de passe doit contenir au moins 6 caractères, une majuscule et une minuscule"
+  ),
 });
 
 const onSubmit = async (values) => {
